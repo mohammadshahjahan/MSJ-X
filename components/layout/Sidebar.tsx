@@ -1,5 +1,5 @@
 import React from "react";
-import { BiLogOut } from "react-icons/bi";
+import { BiLogIn, BiLogOut } from "react-icons/bi";
 import { BsHouseFill, BsBellFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import SidebarLogo from "./SidebarLogo";
@@ -7,8 +7,11 @@ import SidebarItem from "./SidebarItem";
 import SidebarTweetButton from "./SidebarTweetButton";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { signOut } from "next-auth/react";
+import useLoginModal from "@/hooks/useLoginModal";
 
 const Sidebar = () => {
+  const { data: currentUser } = useCurrentUser();
+
   const items = [
     {
       icon: BsHouseFill,
@@ -24,12 +27,12 @@ const Sidebar = () => {
     {
       icon: FaUser,
       label: "Profile",
-      href: `/users/123`,
+      href: `/users/${currentUser?.id}`,
       auth: true,
     },
   ];
 
-  const { data: currentUser } = useCurrentUser();
+  const loginModal = useLoginModal();
 
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">
@@ -50,6 +53,15 @@ const Sidebar = () => {
               onClick={() => signOut()}
               icon={BiLogOut}
               label="Logout"
+            />
+          )}
+          {!currentUser && (
+            <SidebarItem
+              onClick={() => {
+                loginModal.onOpen();
+              }}
+              icon={BiLogIn}
+              label="Login"
             />
           )}
           <SidebarTweetButton />

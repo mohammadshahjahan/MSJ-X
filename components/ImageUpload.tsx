@@ -15,6 +15,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   label,
   disabled,
 }) => {
+  // It is used for showing image on input field, if we use {label}  then it might rerender again if we use onChange
   const [base64, setBase64] = useState(value);
 
   const handleChange = useCallback(
