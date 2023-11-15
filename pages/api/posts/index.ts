@@ -18,7 +18,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     if (req.method === "GET") {
       const { userId } = req.query;
-      console.log(userId);
       let posts;
       if (userId && typeof userId === "string") {
         posts = await prisma.post.findMany({
