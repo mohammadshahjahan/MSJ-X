@@ -2,7 +2,14 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+make a .env file in the root folder and these variables and fill the respective values :-
+  DATABASE_URL=""
+  NEXTAUTH_JWT_SECRET=""
+  NEXTAUTH_SECRET=""
+
+then run a " npm install " in terminal to download all dependencies,
+
+then run the development server:
 
 ```bash
 npm run dev
@@ -38,7 +45,7 @@ Features :-
 - Notifications
 - User Profile
 
-Tech Stack :-
+## Tech Stack :-
 
 - TypeScript
 - Next.js
@@ -46,3 +53,5 @@ Tech Stack :-
 - Prisma
 - Tailwind
 - MongoDB
+
+## Deployed site :- https://resilient-unicorn-b56e58.netlify.app/
