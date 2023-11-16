@@ -6,6 +6,7 @@ import usePost from "@/hooks/usePost";
 import Header from "@/components/Header";
 import PostItem from "@/components/Post/PostItem";
 import Form from "@/components/Form";
+import CommentFeed from "@/components/Post/CommentFeed";
 
 const PostView = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ const PostView = () => {
         isComment="true"
         placeholder="Tweet Your reply"
       />
+      <CommentFeed comments={fetchedPost?.comments} />
     </>
   );
 };

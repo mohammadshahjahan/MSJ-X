@@ -7,6 +7,7 @@ import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import Button from "./Button";
 import Avatar from "./Avatar";
+import usePost from "@/hooks/usePost";
 
 interface FormProps {
   placeholder: string;
@@ -19,21 +20,26 @@ const Form: React.FC<FormProps> = ({ placeholder, isComment, postId }) => {
   const loginModal = useLoginModal();
   const { data: currentUser } = useCurrentUser();
   const { mutate: mutatePosts } = usePosts();
+  const { mutate: mutatePost } = usePost(postId as string);
   const [body, setBody] = useState("");
   const [isloading, setIsLoading] = useState(false);
   const handleSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
-      await axios.post("/api/posts", { body, userId: currentUser.id });
+
+      const url = isComment ? `/api/comments?postId=${postId}` : "/api/posts";
+
+      await axios.post(url, { body, userId: currentUser.id });
       toast.success("Tweet Posted");
       setBody("");
       mutatePosts();
+      mutatePost();
     } catch (error) {
       toast.error("Do it again!");
     } finally {
       setIsLoading(false);
     }
-  }, [body, mutatePosts, currentUser?.id]);
+  }, [body, mutatePosts, currentUser?.id, isComment, postId, mutatePost]);
   return (
     <div className="border-b-[1px] border-neutral-800 px-5 py-2">
       {currentUser ? (
