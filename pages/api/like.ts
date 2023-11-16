@@ -26,6 +26,32 @@ export default async function handler(
     let likedUpdatedIds = [...(post.likedIds || [])];
     if (req.method === "POST") {
       likedUpdatedIds.push(currentUser.id);
+      try {
+        const p = await prisma.post.findUnique({
+          where: {
+            id: postId,
+          },
+        });
+        if (p?.userId) {
+          await prisma.notifications.create({
+            data: {
+              body: `@${currentUser.username} liked your tweet`,
+              userId: post.userId,
+            },
+          });
+
+          await prisma.user.update({
+            where: {
+              id: post.userId,
+            },
+            data: {
+              hasNotification: true,
+            },
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
     if (req.method === "DELETE") {
       likedUpdatedIds = likedUpdatedIds.filter((ids) => ids !== currentUser.id);

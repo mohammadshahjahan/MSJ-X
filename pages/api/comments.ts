@@ -19,6 +19,39 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    try {
+      const p = await prisma.post.findUnique({
+        where: {
+          id: postId,
+        },
+      });
+      if (p?.userId && currentUser?.username) {
+        await prisma.notifications.create({
+          data: {
+            body: `@${currentUser.username} replied on your tweet`,
+            userId: p.userId,
+          },
+        });
+
+        await prisma.user.update({
+          where: {
+            id: p.userId,
+          },
+          data: {
+            hasNotification: true,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
     res.status(200).json(comment);
   } catch (error) {
     console.log(error);
